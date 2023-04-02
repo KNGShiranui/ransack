@@ -3,8 +3,8 @@ class CreateRepositories < ActiveRecord::Migration[6.1]
     create_table :repositories do |t|
       t.string :name
       t.text :description
-      t.interger :status
-      t.interger :priority
+      t.integer :status
+      t.integer :priority
 
       t.timestamps
     end
