@@ -1,25 +1,21 @@
 class RepositoriesController < ApplicationController
   before_action :set_repository, only: %i[ show edit update destroy ]
 
-  # GET /repositories or /repositories.json
   def index
-    @repositories = Repository.all
+    @q = Repository.ransack(params[:q])
+    @repositories = @q.result(distinct: true).order("created_at desc")
   end
 
-  # GET /repositories/1 or /repositories/1.json
   def show
   end
 
-  # GET /repositories/new
   def new
     @repository = Repository.new
   end
 
-  # GET /repositories/1/edit
   def edit
   end
 
-  # POST /repositories or /repositories.json
   def create
     @repository = Repository.new(repository_params)
 
@@ -34,7 +30,6 @@ class RepositoriesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /repositories/1 or /repositories/1.json
   def update
     respond_to do |format|
       if @repository.update(repository_params)
@@ -47,7 +42,6 @@ class RepositoriesController < ApplicationController
     end
   end
 
-  # DELETE /repositories/1 or /repositories/1.json
   def destroy
     @repository.destroy
 
@@ -58,13 +52,11 @@ class RepositoriesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_repository
-      @repository = Repository.find(params[:id])
-    end
+  def set_repository
+    @repository = Repository.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def repository_params
-      params.require(:repository).permit(:name, :description, :status, :priority)
-    end
+  def repository_params
+    params.require(:repository).permit(:name, :description, :status, :priority)
+  end
 end
